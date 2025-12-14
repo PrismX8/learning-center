@@ -8,12 +8,12 @@ function searchurl(url) {
 		case "ddg":
 			proxy(`https://duckduckgo.com/?q=${url}`)
 			break;
-		case "brave":
-			proxy(`https://search.brave.com/search?q=${url}`)
-			break;
-		default:
 		case "google":
 			proxy(`https://www.google.com/search?q=${url}`)
+			break;
+		default:
+		case "brave":
+			proxy(`https://search.brave.com/search?q=${url}`)
 			break;
 	}
 }
