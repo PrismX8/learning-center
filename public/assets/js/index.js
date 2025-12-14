@@ -14,11 +14,11 @@ function fullscreen() {
 
 async function registerSW() {
 	await navigator.serviceWorker.register("/dynamic.sw-handler.js", {
-		scope: "/shuttle-dn",
+		scope: "/nebulo-dn",
 	});
 	const workerURL = "/uv.sw-handler.js";
 	const worker = await navigator.serviceWorker.getRegistration(workerURL, {
-		scope: "/shuttle-uv",
+		scope: "/nebulo-uv",
 	});
 	if (worker) return worker;
 	return navigator.serviceWorker.register(workerURL, { scope: __uv$config.prefix });
@@ -54,8 +54,8 @@ function abc() {
 		return;
 	}
 
-	popup.document.body.innerHTML = `<title>${localStorage.getItem("shuttle||name") || "Sign in to your account"}</title>
-<link rel="icon" href="${localStorage.getItem("shuttle||icon") || "https://www.microsoft.com/favicon.ico"}">
+	popup.document.body.innerHTML = `<title>${localStorage.getItem("nebulo||name") || "Sign in to your account"}</title>
+<link rel="icon" href="${localStorage.getItem("nebulo||icon") || "https://www.microsoft.com/favicon.ico"}">
 <iframe style="height:100%; width: 100%; border: none; position: fixed; top: 0; right: 0; left: 0; bottom: 0; border: none" sandbox="allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-presentation allow-same-origin allow-scripts allow-top-navigation allow-top-navigation-by-user-activation" src="${window.location.href}"></iframe>`;
 
 	window.location.replace("https://www.google.com/");
@@ -64,20 +64,20 @@ function abc() {
 registerSW();
 
 window.addEventListener("load", () => {
-	if (localStorage.getItem("shuttle||title")) document.title = localStorage.getItem("shuttle||title");
-	if (localStorage.getItem("shuttle||favicon")) setFavicon(localStorage.getItem("shuttle||favicon"));
+	if (localStorage.getItem("nebulo||title")) document.title = localStorage.getItem("nebulo||title");
+	if (localStorage.getItem("nebulo||favicon")) setFavicon(localStorage.getItem("nebulo||favicon"));
 
-	const savedTheme = localStorage.getItem("shuttle||themehex");
+	const savedTheme = localStorage.getItem("nebulo||themehex");
 	if (savedTheme) {
 		document.body.style.backgroundColor = savedTheme;
 	}
-	if (localStorage.getItem("shuttle||fortniteMode") === "activated") {
+	if (localStorage.getItem("nebulo||fortniteMode") === "activated") {
 		document.body.style.backgroundImage = "url(\"https://i.ytimg.com/vi/6evDWowLMbE/maxresdefault.jpg\")";
 	}
 });
 
 const checkbox = document.getElementById("checkbox");
-const darkMode = localStorage.getItem("shuttle||darkMode");
+const darkMode = localStorage.getItem("nebulo||darkMode");
 
 function setLightMode(enable = true) {
 	enable ? document.body.classList.add("dark") : document.body.classList.remove("dark");
@@ -87,10 +87,10 @@ function setLightMode(enable = true) {
 function toggleDarkMode() {
 	if (document.body.classList.contains("dark")) {
 		setLightMode(false);
-		localStorage.setItem("shuttle||darkMode", "false");
+		localStorage.setItem("nebulo||darkMode", "false");
 	} else {
 		setLightMode(true);
-		localStorage.setItem("shuttle||darkMode", "true");
+		localStorage.setItem("nebulo||darkMode", "true");
 	}
 }
 

@@ -4,7 +4,7 @@ const frame = document.getElementById("ifr");
 frame.addEventListener("load", () => msg.innerText = frame.contentDocument.title);
 
 function searchurl(url) {
-	switch (localStorage.getItem("shuttle||search")) {
+	switch (localStorage.getItem("nebulo||search")) {
 		case "ddg":
 			proxy(`https://duckduckgo.com/?q=${url}`)
 			break;
@@ -31,9 +31,9 @@ function isUrl(val = "") {
 }
 
 function resolveURL(url) {
-	switch(localStorage.getItem("shuttle||proxy")) {
+	switch(localStorage.getItem("nebulo||proxy")) {
 		case "dy": 
-			return "/shuttle-dn/" + Ultraviolet.codec.xor.decode(url);
+			return "/nebulo-dn/" + Ultraviolet.codec.xor.decode(url);
 		default:
 		case "uv":
 			return  __uv$config.prefix + __uv$config.encodeUrl(url);

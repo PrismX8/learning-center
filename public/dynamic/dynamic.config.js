@@ -1,7 +1,7 @@
 // See documentation for more information 
 
 self.__dynamic$config = {
-  prefix: "/shuttle-dn/",
+  prefix: "/nebulo-dn/",
   encoding: "xor",
   mode: "production",
   logLevel: 0,

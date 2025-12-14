@@ -52,5 +52,5 @@ httpServer.on("upgrade", (req, socket, head) => {
 
 httpServer.listen({ port: process.env.PORT || 8080 }, () => {
 	const addr = httpServer.address();
-	console.log(`\x1b[42m\x1b[1m shuttle\n Port: ${addr.port}\x1b[0m`);
+	console.log(`\x1b[42m\x1b[1m nebulo\n Port: ${addr.port}\x1b[0m`);
 });

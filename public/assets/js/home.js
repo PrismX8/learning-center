@@ -6,13 +6,13 @@ var erudaScript;
 
 /*
 const splash = [
-	"shuttle is so hot",
+	"nebulo is so hot",
 	"Go ahead, browse your ex's social media profiles.",
 	"We take your online privacy as seriously as your ex takes stalking your social media profiles.",
 	"Check our our github.",
 	"Shhh... we won't tell anyone you're here.",
 	"Join our discord for more links.",
-	"Imagine not using shuttle",
+	"Imagine not using nebulo",
 	"No website is out of your reach now.",
 	"Your online freedom, our promise.",
 	"Because a blocked internet, is no internet at all.",

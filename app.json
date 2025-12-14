@@ -1,5 +1,5 @@
 {
-  "name": "Shuttle V3",
+  "name": "Nebulo",
   "description": "A simple web proxy",
   "image": "heroku/nodejs",
   "addons": [],
