@@ -78,11 +78,12 @@ searchInput.addEventListener("input", (event) => {
 			fetchResults(searchText)
 		}
 		if (searchText.length < 1) {
-			document.getElementById("suggestions").style.display = "none";
+		    document.getElementById("suggestions").style.display = "none";
 		} else {
-			document.getElementById("suggestions").style.display = "block";
+		    document.getElementById("suggestions").style.display = "block";
 		}
-	}, 100);
+		document.getElementById('preview').style.display = 'none';
+}, 100);
 });
 
 const form = document.getElementById("form");
@@ -97,9 +98,9 @@ searchInput.addEventListener("input", (event) => {
 
 function erudaToggle() {
 	var elem = document.getElementById("ifr");
-	
+
 	if (erudaScript) {
-		elem.contentWindow.eruda.destroy(); 
+		elem.contentWindow.eruda.destroy();
 		elem.removeChild(erudaScript);
 		erudaScript = undefined;
 	} else {
@@ -111,4 +112,34 @@ function erudaToggle() {
 			elem.contentWindow.eruda.show();
 		};
 	}
+}
+
+function isUrl(val = "") {
+    if (/^http(s?):\/\//.test(val) || val.includes(".") && val.substr(0, 1) !== " ") return true;
+    return false;
+}
+
+searchInput.addEventListener('paste', (event) => {
+    const pasted = (event.clipboardData || window.clipboardData).getData('text');
+    if (isUrl(pasted)) {
+        fetchMeta(pasted);
+    }
+});
+
+function fetchMeta(url) {
+    fetch(`/api/meta?url=${encodeURIComponent(url)}`)
+        .then(response => response.json())
+        .then(data => {
+            const preview = document.getElementById('preview');
+            if (data.title || data.description) {
+                preview.innerHTML = `<div style="margin-top: 10px; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 5px;"><p style="color: #ccc; font-size: 14px;">${url}</p><h4>${data.title}</h4><p>${data.description}</p></div>`;
+                preview.style.display = 'block';
+            } else {
+                preview.style.display = 'none';
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching meta:', error);
+            document.getElementById('preview').style.display = 'none';
+        });
 }

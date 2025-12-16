@@ -3,6 +3,7 @@ import { createServer } from "node:http";
 import { uvPath } from "@titaniumnetwork-dev/ultraviolet";
 import { dynamicPath } from "@nebula-services/dynamic";
 import express from "express";
+import * as cheerio from "cheerio";
 
 const routes = [
 	["/", "index"],
@@ -26,6 +27,26 @@ app.set("view engine", "ejs")
 app.use(express.static("./public"));
 app.use("/uv/", express.static(uvPath));
 app.use("/dynamic/", express.static(dynamicPath))
+
+app.get('/api/meta', async (req, res) => {
+    const { url } = req.query;
+    if (!url) {
+        return res.status(400).json({ error: 'URL parameter required' });
+    }
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            return res.status(400).json({ error: 'Failed to fetch URL' });
+        }
+        const html = await response.text();
+        const $ = cheerio.load(html);
+        const title = $('meta[property="og:title"]').attr('content') || $('title').text().trim();
+        const description = $('meta[property="og:description"]').attr('content') || $('meta[name="description"]').attr('content') || '';
+        res.json({ title, description });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
 
 for (const [path, page] of routes) {
 	app.get(path, (_, res) => res.render("layout", {
