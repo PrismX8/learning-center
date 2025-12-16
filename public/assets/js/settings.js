@@ -19,7 +19,8 @@ window.addEventListener("load", () => {
 	try {
 	const st = localStorage.getItem("nebulo||themehex");
 	if (st) document.querySelector("#colorPicker").value = savedTheme;
-	if(localStorage.getItem("nebulo||search")) findSel(searchSelector, localStorage.getItem("nebulo||search")).selected = true;
+	if(!localStorage.getItem("nebulo||search")) localStorage.setItem("nebulo||search", "brave");
+	findSel(searchSelector, localStorage.getItem("nebulo||search")).selected = true;
 	if(localStorage.getItem("nebulo||proxy")) findSel(proxySelector, localStorage.getItem("nebulo||proxy")).selected = true;
 	} catch {}
 	searchSelector.addEventListener("change", e => localStorage.setItem("nebulo||search", e.target.value));
