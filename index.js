@@ -3,7 +3,6 @@ import { createServer } from "node:http";
 import { uvPath } from "@titaniumnetwork-dev/ultraviolet";
 import { dynamicPath } from "@nebula-services/dynamic";
 import express from "express";
-import * as cheerio from "cheerio";
 
 const routes = [
 	["/", "index"],
@@ -39,9 +38,8 @@ app.get('/api/meta', async (req, res) => {
             return res.status(400).json({ error: 'Failed to fetch URL' });
         }
         const html = await response.text();
-        const $ = cheerio.load(html);
-        const title = $('meta[property="og:title"]').attr('content') || $('title').text().trim();
-        const description = $('meta[property="og:description"]').attr('content') || $('meta[name="description"]').attr('content') || '';
+        const title = html.match(/<meta property="og:title" content="([^"]*)"/i)?.[1] || html.match(/<title[^>]*>(.*?)<\/title>/i)?.[1] || '';
+        const description = html.match(/<meta property="og:description" content="([^"]*)"/i)?.[1] || html.match(/<meta name="description" content="([^"]*)"/i)?.[1] || '';
         res.json({ title, description });
     } catch (e) {
         res.status(500).json({ error: e.message });
