@@ -1,4 +1,59 @@
-window.bare = new Ultraviolet.BareClient(new URL(__uv$config.bare, window.location));
+// Build a Bare client if UV is available; otherwise fall back to window.fetch so the app keeps working
+if (window.Ultraviolet && window.__uv$config) {
+	window.bare = new Ultraviolet.BareClient(new URL(__uv$config.bare, window.location));
+	
+	// Override fetch to add better headers for stealth
+	const originalFetch = window.bare.fetch;
+	window.bare.fetch = function(input, init = {}) {
+		if (!init.headers) {
+			init.headers = {};
+		}
+		
+		// Ensure proper headers for better stealth
+		if (typeof init.headers === 'object' && !Array.isArray(init.headers)) {
+			// Add User-Agent if not present
+			if (!init.headers['User-Agent'] && !init.headers['user-agent']) {
+				init.headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
+			}
+			// Add Accept-Language
+			if (!init.headers['Accept-Language']) {
+				init.headers['Accept-Language'] = 'en-US,en;q=0.9';
+			}
+			// Add Accept
+			if (!init.headers['Accept']) {
+				init.headers['Accept'] = 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7';
+			}
+			// Add Sec-Fetch headers
+			if (!init.headers['Sec-Fetch-Dest']) {
+				init.headers['Sec-Fetch-Dest'] = 'document';
+			}
+			if (!init.headers['Sec-Fetch-Mode']) {
+				init.headers['Sec-Fetch-Mode'] = 'navigate';
+			}
+			if (!init.headers['Sec-Fetch-Site']) {
+				init.headers['Sec-Fetch-Site'] = 'none';
+			}
+			if (!init.headers['Sec-Fetch-User']) {
+				init.headers['Sec-Fetch-User'] = '?1';
+			}
+			// Add Upgrade-Insecure-Requests
+			if (!init.headers['Upgrade-Insecure-Requests']) {
+				init.headers['Upgrade-Insecure-Requests'] = '1';
+			}
+			// Add DNT
+			if (!init.headers['DNT']) {
+				init.headers['DNT'] = '1';
+			}
+		}
+		
+		return originalFetch.call(this, input, init);
+	};
+} else {
+	console.error("[nebulo] Ultraviolet not loaded; falling back to direct fetch. Proxying will be limited.");
+	window.bare = {
+		fetch: (...args) => fetch(...args),
+	};
+}
 
 function fullscreen() {
 	var elem = document.getElementById("ifr")
@@ -13,15 +68,33 @@ function fullscreen() {
 
 
 async function registerSW() {
-	await navigator.serviceWorker.register("/dynamic.sw-handler.js", {
-		scope: "/nebulo-dn",
-	});
+	if (!("serviceWorker" in navigator)) return null;
+
+	try {
+		await navigator.serviceWorker.register("/dynamic.sw-handler.js", {
+			scope: "/nebulo-dn/",
+		});
+	} catch (err) {
+		// Dynamic SW registration failed (non-critical)
+	}
+
 	const workerURL = "/uv.sw-handler.js";
-	const worker = await navigator.serviceWorker.getRegistration(workerURL, {
-		scope: "/nebulo-uv",
-	});
-	if (worker) return worker;
-	return navigator.serviceWorker.register(workerURL, { scope: __uv$config.prefix });
+	let worker = await navigator.serviceWorker.getRegistration(__uv$config.prefix).catch(() => null);
+
+	if (!worker) {
+		try {
+			worker = await navigator.serviceWorker.register(workerURL, { scope: __uv$config.prefix });
+		} catch (err) {
+			console.error("[nebulo] UV SW registration failed", err);
+			return null;
+		}
+	}
+
+	try {
+		await navigator.serviceWorker.ready;
+	} catch {}
+
+	return worker;
 }
 
 function setFavicon(f) {
@@ -79,6 +152,20 @@ window.addEventListener("load", () => {
 const checkbox = document.getElementById("checkbox");
 const darkMode = localStorage.getItem("nebulo||darkMode");
 
+function setActiveNav() {
+	const currentPath = window.location.pathname.replace(/\/index\.html?$/, "/");
+	document.querySelectorAll(".sidebar a[data-path]").forEach((link) => {
+		const targetPath = link.getAttribute("data-path");
+		if (targetPath === currentPath) {
+			link.classList.remove("nav-btn");
+			link.classList.add("nav-active");
+		} else {
+			link.classList.remove("nav-active");
+			link.classList.add("nav-btn");
+		}
+	});
+}
+
 function setLightMode(enable = true) {
 	enable ? document.body.classList.add("dark") : document.body.classList.remove("dark");
 	checkbox.checked = enable;
@@ -97,6 +184,7 @@ function toggleDarkMode() {
 checkbox.addEventListener("change", toggleDarkMode);
 
 setLightMode(darkMode == "true");
+setActiveNav();
 
 /**
  * Why is this a thing

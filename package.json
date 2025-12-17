@@ -4,7 +4,7 @@
   "description": "Experience the global internet using Shuttle, the swiftest and most uncluttered proxy solution. Relish a heightened level of privacy during your online sessions, free from censorship.",
   "type": "module",
   "scripts": {
-    "start": "node index.js"
+    "start": "node backend/server.js"
   },
   "repository": {
     "type": "git",

@@ -27,14 +27,49 @@ window.addEventListener("load", () => {
 });
 */
 
+function initFormHandler() {
+	const form = document.getElementById("form");
+	const searchInput = document.getElementById("search");
+	
+	if (!searchInput) {
+		console.error("Search input element not found");
+		return false;
+	}
+	
+	if (!form) {
+		console.error("Form element not found");
+		return false;
+	}
+	
+	if (typeof go !== 'function') {
+		return false;
+	}
+	
+	form.addEventListener("submit", (event) => {
+		event.preventDefault();
+		const searchValue = searchInput.value.trim();
+		if (!searchValue) {
+			return;
+		}
+		go(searchValue);
+	});
+	
+	return true;
+}
+
 window.addEventListener("DOMContentLoaded", () => {
 	const link = atob(window.location.hash.slice(1));
-	if (link) go(link);
-});
-
-document.getElementById("form").addEventListener("submit", (event) => {
-	event.preventDefault();
-	go(search.value);
+	if (link && typeof go === 'function') go(link);
+	
+	// Try to initialize form handler, retry if go is not available yet
+	if (!initFormHandler()) {
+		// Retry after a short delay in case scripts are still loading
+		setTimeout(() => {
+			if (!initFormHandler()) {
+				console.error("Failed to initialize form handler after retry. go function may not be loaded.");
+			}
+		}, 100);
+	}
 });
 
 async function fetchResults(searchText) {
@@ -43,7 +78,6 @@ async function fetchResults(searchText) {
 		const data = await response.json();
 		isRequestPending = false;
 		if (!Array.isArray(data)) {
-			console.log(`Error: Invalid response format. Expected Array (got ${typeof data})`);
 			return;
 		}
 		const suggestions = document.getElementById("suggestions");
@@ -97,21 +131,38 @@ searchInput.addEventListener("input", (event) => {
 });
 
 function erudaToggle() {
-	var elem = document.getElementById("ifr");
+	const elem = document.getElementById("ifr");
+	const doc = elem?.contentDocument;
 
-	if (erudaScript) {
-		elem.contentWindow.eruda.destroy();
-		elem.removeChild(erudaScript);
-		erudaScript = undefined;
-	} else {
-		erudaScript = document.createElement("script");
-		erudaScript.src = "https://cdn.jsdelivr.net/npm/eruda";
-		elem.contentDocument.body.appendChild(erudaScript);
-		erudaScript.onload = function() {
-			elem.contentWindow.eruda.init();
-			elem.contentWindow.eruda.show();
-		};
+	// Only allow toggling once a page is actually loaded in the iframe
+	if (!doc || !doc.body || !elem.src) {
+		return;
 	}
+
+	if (erudaScript && erudaScript.parentNode === doc.body) {
+		try {
+			if (elem.contentWindow?.eruda) elem.contentWindow.eruda.destroy();
+			doc.body.removeChild(erudaScript);
+		} catch {}
+		erudaScript = undefined;
+		return;
+	}
+
+	erudaScript = doc.createElement("script");
+	erudaScript.src = "https://cdn.jsdelivr.net/npm/eruda";
+	erudaScript.onload = function() {
+		try {
+			if (elem.contentWindow?.eruda) {
+				elem.contentWindow.eruda.init();
+				elem.contentWindow.eruda.show();
+			}
+		} catch {}
+	};
+	erudaScript.onerror = function() {
+		try { doc.body.removeChild(erudaScript); } catch {}
+		erudaScript = undefined;
+	};
+	doc.body.appendChild(erudaScript);
 }
 
 function isUrl(val = "") {

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <meta name="theme-color" content="#000000">
+  <meta name="language" content="English">
+  <title>Nebulo | Games</title>
+  <meta name="description" content="Browse games through Nebulo with Ultraviolet or Dynamic proxy options.">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/particles.css">
+  <script src="https://kit.fontawesome.com/be27c0ad9d.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script src="/uv/uv.bundle.js"></script>
+  <script src="/uv/uv.config.js"></script>
+  <script src="/assets/js/index.js" defer></script>
+  <script src="/assets/js/particles.js" defer></script>
+</head>
+<body>
+  <div id="particles-js"></div>
+
+  <div class="sidebar">
+    <a href="/" id="logo">
+      <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=100&h=100&fit=crop&crop=center" alt="Nebulo Logo" style="border-radius: 50%;">
+    </a>
+    <a href="/" class="nav-btn" data-path="/">Home</a>
+    <a href="/math" class="nav-btn" data-path="/math">Games</a>
+    <a href="/physics" class="nav-btn" data-path="/physics">Apps</a>
+    <a href="/settings" class="nav-btn" data-path="/settings">Settings</a>
+    <a id="time" class="nav-btn" style="display: flex; justify-content: flex-end; margin-left: auto;"></a>
+    <div>
+      <input type="checkbox" class="checkbox" id="checkbox">
+      <label for="checkbox" class="checkbox-label">
+        <i class="fas fa-moon"></i>
+        <i class="fas fa-sun"></i>
+        <span class="ball"></span>
+      </label>
+    </div>
+  </div>
+
+  <div class="games-body" style="width: 100%; min-height: calc(100vh - 80px); margin: 0; padding: 0; position: relative; z-index: 1;">
+    <h1 style="color: white; text-align: center; font-family: 'Poppins', sans-serif; margin: 20px 0;">Games</h1>
+    <iframe
+      id="ifr"
+      src="/nebulo-uv/hvtrs8/-sjsroptcl%2Cvgraen.cpr/cln-eaoeq.jtol"
+      style="width: 100%; height: calc(100vh - 80px); border: none; position: relative; z-index: 2;"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; microphone; camera; fullscreen; payment; geolocation"
+      allowfullscreen
+      sandbox="allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-presentation allow-same-origin allow-scripts allow-top-navigation allow-top-navigation-by-user-activation allow-downloads allow-storage-access-by-user-activation"
+      referrerpolicy="no-referrer-when-downgrade"
+      loading="eager">
+    </iframe>
+  </div>
+</body>
+</html>
+

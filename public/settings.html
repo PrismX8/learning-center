@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <meta name="theme-color" content="#000000">
+  <meta name="language" content="English">
+  <title>Nebulo | Settings</title>
+  <meta name="description" content="Tune Nebulo preferences including proxy, theme, and cloaking options.">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/particles.css">
+  <script src="https://kit.fontawesome.com/be27c0ad9d.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script src="/uv/uv.bundle.js"></script>
+  <script src="/uv/uv.config.js"></script>
+  <script src="/assets/js/index.js" defer></script>
+  <script src="/assets/js/particles.js" defer></script>
+</head>
+<body>
+  <div id="particles-js"></div>
+
+  <div class="sidebar">
+    <a href="/" id="logo">
+      <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=100&h=100&fit=crop&crop=center" alt="Nebulo Logo" style="border-radius: 50%;">
+    </a>
+    <a href="/" class="nav-btn" data-path="/">Home</a>
+    <a href="/math" class="nav-btn" data-path="/math">Games</a>
+    <a href="/physics" class="nav-btn" data-path="/physics">Apps</a>
+    <a href="/settings" class="nav-btn" data-path="/settings">Settings</a>
+    <a id="time" class="nav-btn" style="display: flex; justify-content: flex-end; margin-left: auto;"></a>
+    <div>
+      <input type="checkbox" class="checkbox" id="checkbox">
+      <label for="checkbox" class="checkbox-label">
+        <i class="fas fa-moon"></i>
+        <i class="fas fa-sun"></i>
+        <span class="ball"></span>
+      </label>
+    </div>
+  </div>
+
+  <div class="settings-container">
+    <div class="settings-header">
+      <h1 class="settings-title">
+        <i class="fas fa-cog"></i>
+        Settings
+      </h1>
+      <p class="settings-subtitle">Customize your Nebulo experience</p>
+    </div>
+
+    <div class="settings-grid">
+      <!-- Box 1: Proxy Type -->
+      <div class="settings-box">
+        <div class="box-header">
+          <i class="fas fa-shield-alt"></i>
+          <h3>Proxy Type</h3>
+        </div>
+        <select class="settings-select" id="proxy">
+          <option value="uv">Ultraviolet</option>
+          <option value="dy">Dynamic (BETA)</option>
+        </select>
+        <p class="settings-description">Choose your preferred proxy method</p>
+      </div>
+
+      <!-- Box 2: Search Engine -->
+      <div class="settings-box">
+        <div class="box-header">
+          <i class="fas fa-search"></i>
+          <h3>Search Engine</h3>
+        </div>
+        <select class="settings-select" id="se">
+          <option value="google">Google</option>
+          <option value="ddg">DuckDuckGo</option>
+          <option value="brave">Brave</option>
+        </select>
+        <p class="settings-description">Default search engine for queries</p>
+      </div>
+
+      <!-- Box 3: Theme Color -->
+      <div class="settings-box">
+        <div class="box-header">
+          <i class="fas fa-palette"></i>
+          <h3>Theme Color</h3>
+        </div>
+        <div class="color-picker-wrapper">
+          <input type="color" id="colorPicker" class="settings-color-picker" oninput="changeTheme(this.value)">
+          <button class="settings-button secondary" id="reset-theme">
+            <i class="fas fa-undo"></i>
+            Reset
+          </button>
+        </div>
+        <p class="settings-description">Customize the background color</p>
+      </div>
+
+      <!-- Box 4: Page Title -->
+      <div class="settings-box">
+        <div class="box-header">
+          <i class="fas fa-heading"></i>
+          <h3>Page Title</h3>
+        </div>
+        <input type="text" class="settings-input" onchange="changeTitle(this.value)" placeholder="Enter custom title">
+        <p class="settings-description">Change the browser tab title</p>
+      </div>
+
+      <!-- Box 5: Favicon URL -->
+      <div class="settings-box">
+        <div class="box-header">
+          <i class="fas fa-image"></i>
+          <h3>Favicon URL</h3>
+        </div>
+        <input type="text" class="settings-input" onchange="changeFavicon(this.value)" placeholder="https://example.com/favicon.ico">
+        <p class="settings-description">Change the browser tab icon</p>
+      </div>
+
+      <!-- Box 6: Advanced Features -->
+      <div class="settings-box">
+        <div class="box-header">
+          <i class="fas fa-code"></i>
+          <h3>Advanced</h3>
+        </div>
+        <div class="advanced-buttons">
+          <button class="settings-button" id="abc">
+            <i class="fas fa-shield"></i>
+            Cloaking
+          </button>
+          <button class="settings-button" id="mystery-button">
+            <i class="fas fa-toggle-off"></i>
+            Mystery
+          </button>
+        </div>
+        <p class="settings-description">Advanced features and options</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="/assets/js/settings.js" defer></script>
+</body>
+</html>
+
